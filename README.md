@@ -9,5 +9,6 @@ This project implements a tax calculator web application using HTML, CSS, and Ja
 ```bash
 git clone https://github.com/your-username/tax-calculator.git
 
-Open the project folder in your code editor.
-Open the index.html file in a web browser to view the application.
+```
+1. Open the project folder in your code editor.
+2. Open the index.html file in a web browser to view the application.

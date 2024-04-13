@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="text/javascript"
+      src="//code.jquery.com/jquery-3.7.1.min.js"
+    ></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <style>
+      #section {
+        border: 2px solid black;
+        margin: 170px 500px;
+        padding: auto;
+        align-items: center;
+        text-align: left;
+        width: 30%;
+      }
+      #form {
+        margin: auto;
+        padding: 50px 100px;
+      }
+      .error-icon {
+        display: none;
+        padding: 2px 7px;
+        color: red;
+        border: 0.1px solid red;
+        border-radius: 50%;
+      }
+      #modal {
+        position: absolute;
+        top: 30%;
+        left: 35%;
+        background-color: white;
+        height: 200px;
+        width: 400px;
+        text-align: center;
+        border: 1px solid gray;
+        text-transform: 50%;
+      }
+
+      #modal-content {
+        margin-top: 80px;
+        font-size: 1rem;
+      }
+
+      #closeModalBtn {
+        margin-top: 10px;
+        width: 50%;
+        background-color: #074173;
+        color: white;
+        border: none;
+        padding: 10px 10px;
+        cursor: pointer;
+      }
+
+      img {
+        position: relative;
+        top: 4px;
+        left: 4px;
+        width: 16px;
+        height: 16px;
+      }
+
+      #submitBtn {
+        margin-top: 10px;
+        width: 90%;
+        background-color: #074173;
+        color: white;
+        border: none;
+        padding: 10px 10px;
+        cursor: pointer;
+      }
+      label {
+      }
+      input {
+        margin: 10px 0px;
+        border: 1px solid gray;
+        width: 80%;
+      }
+      #ageSelect {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="section">
+      <form id="form">
+        <label for="incomeIn"
+          >Enter annual gross income:<span
+            data-toggle="tooltip"
+            title="Gross annual income is yout total salary in a year before any deductions"
+            ><img src="icons/info.png" /></span></label
+        ><br />
+
+        <input type="text" id="incomeIn" class="input-field" /><span
+          class="error-icon"
+          data-toggle="tooltip"
+          title="Please enter numbers only"
+          >!</span
+        ><br />
+        <label for="extraIn">Enter extra income:</label><br />
+        <input type="text" id="extraIn" class="input-field" /><span
+          class="error-icon"
+          data-toggle="tooltip"
+          title="Please enter numbers only"
+          >!</span
+        ><br />
+        <label for="ageSelect">Select age group</label><br />
+
+        <select id="ageSelect">
+          <option value="under40">&lt; 40</option>
+          <option value="above40">≥ 40 & &lt; 60</option>
+          <option value="above60">≥ 60</option>
+        </select>
+        <br />
+        <label for="deduct">Enter total applicable deductions:</label><br />
+        <input type="text" id="deduct" class="input-field" /><span
+          class="error-icon"
+          data-toggle="tooltip"
+          title="Please enter numbers only"
+          >!</span
+        ><br />
+        <button id="submitBtn" type="button">Submit</button>
+      </form>
+    </section>
+    <div id="modal">
+      <div id="modal-content"></div>
+      <button id="closeModalBtn">Close</button>
+    </div>
+
+    <script type="text/javascript">
+      $(function () {
+        $("#submitBtn").click(function () {
+          var grossIncome = parseFloat($("#incomeIn").val());
+          var extraIncome = parseFloat($("#extraIn").val());
+          var deductions = parseFloat($("#deduct").val());
+          var ageGroup = $("#ageSelect").val();
+          var overallIncome = grossIncome + extraIncome - deductions;
+
+          var taxRate = 0;
+          if (overallIncome > 800000) {
+            switch (ageGroup) {
+              case "under40":
+                taxRate = 0.3;
+                break;
+              case "above40":
+                taxRate = 0.4;
+                break;
+              case "above60":
+                taxRate = 0.1;
+                break;
+              default:
+                $("#modal-content").html("Please select an age group");
+                $("#modal").show();
+                return;
+            }
+
+            var taxAmount = (overallIncome - 800000) * taxRate;
+            console.log(taxAmount);
+            $("#modal-content").html(
+              "Your overall income will be " +
+                (overallIncome - taxAmount.toFixed(2)) +
+                " after deductions"
+            );
+            $("#modal").show();
+          } else {
+            $("#modal-content").html("No tax applicable.");
+            $("#modal").show();
+          }
+        });
+
+        $(".input-field").on("input", function () {
+          var inputValue = $(this).val();
+          if (!/^\d*\.?\d*$/.test(inputValue)) {
+            $(this).next(".error-icon").show();
+          } else {
+            $(this).next(".error-icon").hide();
+          }
+        });
+        $("#closeModalBtn").click(function () {
+          $("#modal").hide();
+        });
+      });
+    </script>
+  </body>
+</html>
